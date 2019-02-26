@@ -6,6 +6,7 @@
 
 	"background": {
 		"scripts": [
+			"js/download.js",
 			"js/background.js"
 		],
 		"persistent": false
@@ -22,7 +23,7 @@
 	"commands": {
   "my-command-name": {
     "suggested_key": {
-      "default": "Ctrl+A"
+      "default": "Ctrl+Q"
     },
     "description": "Activate Crop Screen"
   }

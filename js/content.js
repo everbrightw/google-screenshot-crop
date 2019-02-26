@@ -16,7 +16,7 @@ function startScreenshot() { console.log('start screenshot');
 	document.body.style.cursor = 'crosshair';
 
 	document.addEventListener('mousedown', mouseDown, false);
-	document.addEventListener('keydown', keyDown, false);
+
 }
 
 function endScreenshot(coords) {
@@ -38,20 +38,6 @@ function sendMessage(msg) {
 //
 
 var ghostElement, startPos, gCoords, startY;
-
-function keyDown(e) {
-	var keyCode = e.keyCode;
-
-	// Hit: n
-	if ( keyCode == '78' && gCoords ) {
-		e.preventDefault();
-		e.stopPropagation();
-
-		endScreenshot(gCoords);
-
-		return false;
-	}
-}
 
 function mouseDown(e) {
 	e.preventDefault();
