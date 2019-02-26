@@ -207,11 +207,45 @@ function capture(coords) {
 	});
 }
 
+chrome.commands.onCommand.addListener( function(command) {
+    if(command === "my-command-name"){
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+            chrome.tabs.sendMessage(tabs[0].id, {type: "start-screenshots" });
+        });
+    }
+});
+
+
 chrome.browserAction.onClicked.addListener(function(tab) {
     contentURL = tab.url;
 
-	sendMessage({type: 'start-screenshots'}, tab);
+		sendMessage({type: 'start-screenshots'}, tab);
+
 });
+
+
+
+//Get message from content script
+// chrome.runtime.onMessage.addListener(
+//     function(request, sender, sendResponse) {
+//
+//         console.log("received")
+//         sendResponse({
+//             response: "Message received"
+//         });
+//
+//         //get the current url ! and send it to the content script!!!!
+//         chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
+//             var url = tabs[0].url;
+//             console.log(url)
+//             sendDetails(url);
+//         });
+//
+//     }
+// );
+
+
+
 
 chrome.extension.onMessage.addListener(gotMessage);
 
@@ -237,50 +271,4 @@ function saveFile(dataURI) {
 	// }
 	// debugBase64(dataURI);
 	download(dataURI, "test.png", "image/plain");
-	// convert base64 to raw binary data held in a string
-    // doesn't handle URLEncoded DataURIs
-    var byteString = atob(dataURI.split(',')[1]);
-
-    // separate out the mime component
-    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-
-    // write the bytes of the string to an ArrayBuffer
-    var ab = new ArrayBuffer(byteString.length);
-    var ia = new Uint8Array(ab);
-    for (var i = 0; i < byteString.length; i++) {
-        ia[i] = byteString.charCodeAt(i);
-    }
-
-    // create a blob for writing to a file
-    var blob = new Blob([ab], {type: mimeString});
-
-    // come up with a filename
-    var name = contentURL.split('?')[0].split('#')[0];
-    if (name) {
-        name = name
-            .replace(/^https?:\/\//, '')
-            .replace(/[^A-z0-9]+/g, '-')
-            .replace(/-+/g, '-')
-            .replace(/^[_\-]+/, '')
-            .replace(/[_\-]+$/, '');
-        name = '-' + name;
-    } else {
-        name = '';
-    }
-    name = 'screencapture' + name + '.png';
-
-
-	function errorHandler() {
-        console.log('uh-oh');
-    }
-
-	// create a blob for writing to a file
-    window.webkitRequestFileSystem(TEMPORARY, 1024*1024, function(fs){
-        fs.root.getFile(name, {create:true}, function(fileEntry) {
-            fileEntry.createWriter(function(fileWriter) {
-                // fileWriter.onwriteend = onwriteend;
-                fileWriter.write(blob);
-            }, errorHandler);
-        }, errorHandler);
-    }, errorHandler);
 }

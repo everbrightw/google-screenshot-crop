@@ -19,6 +19,14 @@
 	        "all_frames": true
 		}
 	],
+	"commands": {
+  "my-command-name": {
+    "suggested_key": {
+      "default": "Ctrl+A"
+    },
+    "description": "Activate Crop Screen"
+  }
+},
 
 	"browser_action": {
 		"default_title": "Crop and Screen Capture",
